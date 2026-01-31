@@ -39,27 +39,31 @@ pip install -r requirements.txt
 - Run the script
 
 ```bash
-python main.py --charlist /path/to/charlist.txt --font_file /path/to/newstroke_font.h
+python main.py --font_file /path/to/newstroke_font.h
 ```
 
 The resulting file will be in `/master_ttf` named `NewStroke_W[width]_T[thickness].ttf`.
 
 ### Arguments:
 
-**--charlist** (Required)
-
-    The path to the `charlist.txt` file. This lists all symbols and is used to assign the glyphs to the correct characters.
-
 **--font_file** (Required)
 
     The path to the `newstroke_font.h` or `newstroke_font.cpp` file. (They have the exact same contents.) This contains the character strokes encoded as characters that are decoded using the mappings in the `coord.txt` file.
 
+**--force**
+
+    Skip hash check for font file.
+
 **--width**
 
     Default: 1
-    The horizontal scale of the characters relative to the height. 1 uses the original scale.
+    The horizontal scale of the characters. 1 uses the original scale. [0.5-2.0]
 
 **--thickness**
 
     Default: 0.125
-    The line thickness relative to the height. 1 is the same line thickness as the height (which is definitely not wanted). The minimum value is 0.01 and the maximum value is 0.25. Values from 0.05 to 0.25 should be mostly readable.
+    The line thickness relative to the height. [0.01-0.25]
+
+**--visualization**
+
+    Enable stroke visualization using turtle graphics and disable font output.
