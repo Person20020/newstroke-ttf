@@ -42,7 +42,7 @@ pip install -r requirements.txt
 python main.py --charlist /path/to/charlist.txt --font_file /path/to/newstroke_font.h
 ```
 
-The resulting file will be named `NewStroke_W[width]_T[thickness].ttf`.
+The resulting file will be in `/master_ttf` named `NewStroke_W[width]_T[thickness].ttf`.
 
 ### Arguments:
 

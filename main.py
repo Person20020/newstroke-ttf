@@ -3,13 +3,20 @@ import os
 import time
 import turtle
 from hashlib import sha256
+from tkinter.constants import S
+
+import defcon
+import shapely
+from colorama import Fore, Style
+from fontmake.font_project import FontProject
+from fontTools.pens.ttGlyphPen import TTGlyphPen
 
 # File hashes
 newstroke_font_file_hash = (
     "e40d317d8b212d41e7a076a5823cec3656e373d06cf5646fb6c24795aed1675d"
 )
 
-CHAR_HEIGHT = 400
+CHAR_HEIGHT = 2048
 
 
 def float_range(min_val, max_val):
@@ -96,6 +103,7 @@ if not args.force:
             exit(1)
 
 # Load font data
+print(Fore.BLUE + "Loading font data..." + Style.RESET_ALL)
 with open(font_file, "r") as f:
     lines = f.readlines()
 
@@ -112,6 +120,11 @@ for line in lines:
                 if line.endswith('",'):
                     font_path_strings.append(line[1:-2].replace("\\\\", "\\"))
                     continue
+print(
+    Fore.GREEN
+    + f"Loaded {len(font_path_strings)} character path strings."
+    + Style.RESET_ALL
+)
 
 
 # Convert character to coordinate
@@ -204,8 +217,124 @@ def visualize_strokes(font_path_strings):
     wn.bye()
 
 
-try:
-    visualize_strokes(font_path_strings)
-except KeyboardInterrupt, turtle.Terminator:
-    print("Visualization interrupted by user.")
-    turtle.bye()
+# try:
+#     visualize_strokes(font_path_strings)
+# except KeyboardInterrupt, turtle.Terminator:
+#     print("Visualization interrupted by user.")
+#     turtle.bye()
+
+
+# Convert strokes to outlines
+def strokes_to_outline(strokes, width):
+    shapes = []
+
+    for stroke in strokes:
+        line = shapely.geometry.LineString(stroke)
+        outline = line.buffer(
+            width / 2,
+            cap_style="round",
+            join_style="round",
+        )
+        shapes.append(outline)
+
+    return shapely.unary_union(shapes)
+
+
+# Convert to font glyph outlines
+def outline_to_glyph(outline):
+    pen = TTGlyphPen(None)
+
+    if outline.geom_type == "Polygon":
+        polygons = [outline]
+    else:
+        polygons = outline.geoms
+
+    for poly in polygons:
+        exterior = list(poly.exterior.coords)
+        pen.moveTo(exterior[0])
+        for coord in exterior[1:]:
+            pen.lineTo(coord)
+        pen.closePath()
+
+        for interior in poly.interiors:
+            interior_coords = list(interior.coords)
+            pen.moveTo(interior_coords[0])
+            for coord in interior_coords[1:]:
+                pen.lineTo(coord)
+            pen.closePath()
+
+    return pen.glyph()
+
+
+# Draw glyphs
+def draw_glyph(glyph, outline):
+    pen = glyph.getPen()
+    if outline.geom_type == "Polygon":
+        polygons = [outline]
+    else:
+        polygons = outline.geoms
+
+    for poly in polygons:
+        exterior = list(poly.exterior.coords)
+        pen.moveTo(exterior[0])
+        for coord in exterior[1:]:
+            pen.lineTo(coord)
+        pen.closePath()
+
+        for interior in poly.interiors:
+            interior_coords = list(interior.coords)
+            pen.moveTo(interior_coords[0])
+            for coord in interior_coords[1:]:
+                pen.lineTo(coord)
+            pen.closePath()
+
+
+# Generate UFO font
+def generate_ufo(chars_strokes_list):
+    font = defcon.Font()
+    font.info.unitsPerEm = CHAR_HEIGHT
+    font.info.ascender = int(CHAR_HEIGHT * 0.75)
+    font.info.descender = CHAR_HEIGHT * -0.2
+
+    font.info.familyName = "NewStroke"
+    font.info.styleName = f"W{args.width}_T{args.thickness}"
+    font.info.fullName = f"NewStroke W{args.width} T{args.thickness}"
+    font.info.postscriptFontName = f"NewStroke-W{args.width}-T{args.thickness}"
+
+    notdef = font.newGlyph(".notdef")
+    notdef.width = CHAR_HEIGHT // 2
+
+    for index, char_strokes_bounds in enumerate(chars_strokes_list):
+        char_code = index + 32
+        glyph_name = f"uni{char_code:04X}"
+
+        char_strokes, char_bounds = char_strokes_bounds
+        char_width = abs(char_bounds[1] - char_bounds[0])
+
+        glyph = font.newGlyph(glyph_name)
+        glyph.unicode = char_code
+        glyph.width = char_width
+
+        if char_strokes is None:
+            continue
+
+        outline = strokes_to_outline(char_strokes, thickness)
+
+        draw_glyph(glyph, outline)
+
+    return font
+
+
+# Run
+char_strokes_list = []
+for string in font_path_strings:
+    char_strokes_list.append(get_char_strokes(string))
+
+print(Fore.BLUE + "Generating UFO font..." + Style.RESET_ALL)
+font = generate_ufo(char_strokes_list)
+print(Fore.GREEN + "UFO font generation complete." + Style.RESET_ALL)
+
+project = FontProject()
+print(Fore.BLUE + "Building TTF font..." + Style.RESET_ALL)
+project.build_ttfs(ufos=[font])
+print(Fore.GREEN + "TTF font build complete." + Style.RESET_ALL)
