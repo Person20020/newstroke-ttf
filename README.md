@@ -52,7 +52,7 @@ The resulting file will be in `/master_ttf` named `NewStroke_W[width]_T[thicknes
 
 **--force**
 
-    Skip hash check for font file.
+    Skip hash check for font file. (Normally used as an easy way to verify the contents will be correct.) The script may fail in unexpected ways if the file is changed significantly.
 
 **--width**
 
