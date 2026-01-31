@@ -51,24 +51,24 @@ The resulting file will be in `/master_ttf` named `NewStroke-W[width]_T[thicknes
 
 ### Arguments:
 
-**--font_file** (Required)
+- `--font_file` (Required)
 
     The path to the `newstroke_font.h` or `newstroke_font.cpp` file. (They have the exact same contents.) This contains the character strokes encoded as characters that are decoded using the mappings in the `coord.txt` file.
 
-**--force**
+- `--force`
 
     Skip hash check for font file. (Normally used as an easy way to verify the contents will be correct.) The script may fail in unexpected ways if the file is changed significantly.
 
-**--width**
+- `--width`
 
     Default: 1
     The horizontal scale of the characters. 1 uses the original scale. [0.5-2.0]
 
-**--thickness**
+- `--thickness`
 
     Default: 0.125
     The line thickness relative to the height. [0.01-0.25]
 
-**--visualization**
+- `--visualization`
 
     Enable stroke visualization using turtle graphics and disable font output.
