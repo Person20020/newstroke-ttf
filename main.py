@@ -3,13 +3,11 @@ import os
 import time
 import turtle
 from hashlib import sha256
-from tkinter.constants import S
 
 import defcon
 import shapely
 from colorama import Fore, Style
 from fontmake.font_project import FontProject
-from fontTools.pens.ttGlyphPen import TTGlyphPen
 
 # File hashes
 newstroke_font_file_hash = (
@@ -225,13 +223,24 @@ def visualize_strokes(font_path_strings):
 
 
 # Convert strokes to outlines
-def strokes_to_outline(strokes, width):
+def strokes_to_outline(strokes, char_width, thickness):
     shapes = []
 
     for stroke in strokes:
+        # Transform the strokes to center the character for font
+        stroke = (
+            [
+                (stroke[0][0] + char_width / 2),
+                (stroke[0][1] + CHAR_HEIGHT * 1 / 3),
+            ],
+            [
+                (stroke[1][0] + char_width / 2),
+                (stroke[1][1] + CHAR_HEIGHT * 1 / 3),
+            ],
+        )
         line = shapely.geometry.LineString(stroke)
         outline = line.buffer(
-            width / 2,
+            thickness / 2,
             cap_style="round",
             join_style="round",
         )
@@ -240,30 +249,30 @@ def strokes_to_outline(strokes, width):
     return shapely.unary_union(shapes)
 
 
-# Convert to font glyph outlines
-def outline_to_glyph(outline):
-    pen = TTGlyphPen(None)
+# # Convert to font glyph outlines
+# def outline_to_glyph(outline):
+#     pen = TTGlyphPen(None)
 
-    if outline.geom_type == "Polygon":
-        polygons = [outline]
-    else:
-        polygons = outline.geoms
+#     if outline.geom_type == "Polygon":
+#         polygons = [outline]
+#     else:
+#         polygons = outline.geoms
 
-    for poly in polygons:
-        exterior = list(poly.exterior.coords)
-        pen.moveTo(exterior[0])
-        for coord in exterior[1:]:
-            pen.lineTo(coord)
-        pen.closePath()
+#     for poly in polygons:
+#         exterior = list(poly.exterior.coords)
+#         pen.moveTo(exterior[0])
+#         for coord in exterior[1:]:
+#             pen.lineTo(coord)
+#         pen.closePath()
 
-        for interior in poly.interiors:
-            interior_coords = list(interior.coords)
-            pen.moveTo(interior_coords[0])
-            for coord in interior_coords[1:]:
-                pen.lineTo(coord)
-            pen.closePath()
+#         for interior in poly.interiors:
+#             interior_coords = list(interior.coords)
+#             pen.moveTo(interior_coords[0])
+#             for coord in interior_coords[1:]:
+#                 pen.lineTo(coord)
+#             pen.closePath()
 
-    return pen.glyph()
+#     return pen.glyph()
 
 
 # Draw glyphs
@@ -292,8 +301,8 @@ def draw_glyph(glyph, outline):
 # Generate UFO font
 def generate_ufo(chars_strokes_list):
     font = defcon.Font()
-    font.info.unitsPerEm = CHAR_HEIGHT
-    font.info.ascender = int(CHAR_HEIGHT * 0.75)
+    font.info.unitsPerEm = CHAR_HEIGHT * 0.9
+    font.info.ascender = int(CHAR_HEIGHT * 0.7)
     font.info.descender = CHAR_HEIGHT * -0.2
 
     font.info.familyName = "NewStroke"
@@ -318,7 +327,7 @@ def generate_ufo(chars_strokes_list):
         if char_strokes is None:
             continue
 
-        outline = strokes_to_outline(char_strokes, thickness)
+        outline = strokes_to_outline(char_strokes, char_width, thickness)
 
         draw_glyph(glyph, outline)
 
