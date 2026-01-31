@@ -10,23 +10,28 @@ TTF file: (will be here if I finish)
 
 How to use the script:
 
-- Download and extract the [original files](https://vovanium.ru/sledy/newstroke/en).
-
-- Create a python virtual environment and activate it.
+- Clone this repository:
 
 ```bash
-python -m venv venv
+git clone https://github.com/Person20020/newstroke-ttf.git
+cd newstroke-ttf
 ```
+
+- Download and extract the original files. ([link](https://vovanium.ru/sledy/newstroke/en))
+
+- Create a python virtual environment and activate it.
 
 Linux/MacOS:
 
 ```bash
+python -m venv venv
 . ./venv/bin/activate
 ```
 
 Windows:
 
 ```bash
+python -m venv venv
 ./venv/Scripts/activate
 ```
 
@@ -42,7 +47,7 @@ pip install -r requirements.txt
 python main.py --font_file /path/to/newstroke_font.h
 ```
 
-The resulting file will be in `/master_ttf` named `NewStroke_W[width]_T[thickness].ttf`.
+The resulting file will be in `/master_ttf` named `NewStroke-W[width]_T[thickness].ttf`.
 
 ### Arguments:
 

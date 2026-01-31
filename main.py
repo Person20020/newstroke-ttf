@@ -226,11 +226,11 @@ def strokes_to_outline(strokes, char_width, thickness):
         stroke = (
             [
                 (stroke[0][0] + char_width / 2),
-                (stroke[0][1] + CHAR_HEIGHT * 3 / 10),
+                (stroke[0][1] + CHAR_HEIGHT * 30 / 100),
             ],
             [
                 (stroke[1][0] + char_width / 2),
-                (stroke[1][1] + CHAR_HEIGHT * 3 / 10),
+                (stroke[1][1] + CHAR_HEIGHT * 30 / 100),
             ],
         )
         line = shapely.geometry.LineString(stroke)
@@ -271,7 +271,7 @@ def draw_glyph(glyph, outline):
 def generate_ufo(chars_strokes_list):
     font = defcon.Font()
     font.info.unitsPerEm = CHAR_HEIGHT * 0.9
-    font.info.ascender = int(CHAR_HEIGHT * 0.7)
+    font.info.ascender = CHAR_HEIGHT * 0.7
     font.info.descender = CHAR_HEIGHT * -0.2
 
     font.info.familyName = "NewStroke"
