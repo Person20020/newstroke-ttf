@@ -53,7 +53,7 @@ The resulting file will be in `/master_ttf` named `NewStroke-W[width]_T[thicknes
 
 - `--font_file` (Required)
 
-    The path to the `newstroke_font.h` or `newstroke_font.cpp` file. (They have the exact same contents.) This contains the character strokes encoded as characters that are decoded using the mappings in the `coord.txt` file.
+    The path to the `newstroke_font.h` or `newstroke_font.cpp` file. (They have the exact same contents.) This contains the character strokes encoded as characters.
 
 - `--force`
 
