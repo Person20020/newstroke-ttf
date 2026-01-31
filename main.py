@@ -38,13 +38,10 @@ def float_range(min_val, max_val):
 parser = argparse.ArgumentParser(
     formatter_class=argparse.ArgumentDefaultsHelpFormatter, add_help=False
 )
-parser.epilog = "Example usage: python main.py --charlist ./charlist.txt --font_file ./newstroke_font.h"
+parser.epilog = "Example usage: python main.py --font_file ./newstroke_font.h"
 # Input files (Required)
 input_files_group = parser.add_argument_group("input files")
 input_files_group.title = "Input Files (Required)"
-input_files_group.add_argument(
-    "--charlist", required=True, help="Input file containing character list."
-)
 input_files_group.add_argument(
     "--font_file",
     required=True,
@@ -58,13 +55,20 @@ options_group.add_argument(
     "-f",
     "--force",
     action="store_true",
-    help="Skip hash checks for charlist and font file.",
+    help="Skip hash check for font file.",
 )
 options_group.add_argument(
     "-h",
     "--help",
     action="help",
     help="Show this help message and exit.",
+)
+options_group.add_argument(
+    "-t",
+    "--thickness",
+    default=0.125,
+    type=float_range(0.01, 0.25),
+    help="Stroke thickness relative to character height.",
 )
 options_group.add_argument(
     "-w",
@@ -74,11 +78,9 @@ options_group.add_argument(
     help="Horizontal scale of characters.",
 )
 options_group.add_argument(
-    "-t",
-    "--thickness",
-    default=0.125,
-    type=float_range(0.01, 0.25),
-    help="Stroke thickness relative to character height.",
+    "--visualization",
+    action="store_true",
+    help="Enable stroke visualization using turtle graphics and disable font output.",
 )
 
 args = parser.parse_args()
@@ -215,13 +217,6 @@ def visualize_strokes(font_path_strings):
     wn.bye()
 
 
-# try:
-#     visualize_strokes(font_path_strings)
-# except KeyboardInterrupt, turtle.Terminator:
-#     print("Visualization interrupted by user.")
-#     turtle.bye()
-
-
 # Convert strokes to outlines
 def strokes_to_outline(strokes, char_width, thickness):
     shapes = []
@@ -247,32 +242,6 @@ def strokes_to_outline(strokes, char_width, thickness):
         shapes.append(outline)
 
     return shapely.unary_union(shapes)
-
-
-# # Convert to font glyph outlines
-# def outline_to_glyph(outline):
-#     pen = TTGlyphPen(None)
-
-#     if outline.geom_type == "Polygon":
-#         polygons = [outline]
-#     else:
-#         polygons = outline.geoms
-
-#     for poly in polygons:
-#         exterior = list(poly.exterior.coords)
-#         pen.moveTo(exterior[0])
-#         for coord in exterior[1:]:
-#             pen.lineTo(coord)
-#         pen.closePath()
-
-#         for interior in poly.interiors:
-#             interior_coords = list(interior.coords)
-#             pen.moveTo(interior_coords[0])
-#             for coord in interior_coords[1:]:
-#                 pen.lineTo(coord)
-#             pen.closePath()
-
-#     return pen.glyph()
 
 
 # Draw glyphs
@@ -334,7 +303,16 @@ def generate_ufo(chars_strokes_list):
     return font
 
 
-# Run
+# Visualization mode
+if args.visualization:
+    try:
+        visualize_strokes(font_path_strings)
+    except KeyboardInterrupt, turtle.Terminator:
+        print("Visualization interrupted by user.")
+        turtle.bye()
+    exit(0)
+
+# Run normally and generate font
 char_strokes_list = []
 for string in font_path_strings:
     char_strokes_list.append(get_char_strokes(string))
