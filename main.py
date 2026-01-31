@@ -128,7 +128,7 @@ print(
 # Convert character to coordinate
 def get_char_coord(char):
     center_char = "R"
-    step_size = CHAR_HEIGHT / 2 * 0.05
+    step_size = CHAR_HEIGHT / 2 * 0.0525
     return float(ord(char) - ord(center_char)) * step_size
 
 
@@ -231,11 +231,11 @@ def strokes_to_outline(strokes, char_width, thickness):
         stroke = (
             [
                 (stroke[0][0] + char_width / 2),
-                (stroke[0][1] + CHAR_HEIGHT * 1 / 3),
+                (stroke[0][1] + CHAR_HEIGHT * 3 / 10),
             ],
             [
                 (stroke[1][0] + char_width / 2),
-                (stroke[1][1] + CHAR_HEIGHT * 1 / 3),
+                (stroke[1][1] + CHAR_HEIGHT * 3 / 10),
             ],
         )
         line = shapely.geometry.LineString(stroke)
