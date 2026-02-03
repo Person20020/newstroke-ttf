@@ -5,7 +5,7 @@ newstroke-font.tgz
 master_ttf/
 venv/
 
-*.ufo/
+NewStroke-*.ttf
 
 .vscode/
 .zed/

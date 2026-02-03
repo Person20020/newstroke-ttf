@@ -8,7 +8,22 @@ TTF file: (will be here if I finish)
 
 ## Usage
 
-How to use the script:
+### Fontforge script:
+
+This script is run using [Fontforge](https://fontforge.org/en-US/). It uses actual curves for rounded parts which results in much cleaner edges and lower file sizes.
+
+The script does output many errors but it does not appear to affect the quality of the glyphs.
+
+Run the scrip with this command:
+```bash
+fontforge -lang=py -script fontforge-script.py /path/to/newstroke_font.h [-t --thickness=[0.01-0.25]] [-f --force]
+```
+
+The resulting file is saved as `./NewStroke-T[thickness].ttf`.
+
+### Standalone script:
+
+This script uses shapely to approximate the outline and results in somewhat jagged curves. The Fontforge script uses curves and does not loose quality in this way.
 
 - Clone this repository:
 
