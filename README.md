@@ -21,6 +21,16 @@ fontforge -lang=py -script fontforge-script.py /path/to/newstroke_font.h [-t --t
 
 The resulting file is saved as `./NewStroke-T[thickness].ttf`.
 
+- -t --thickness=[0.01-0.25]
+
+    Default: 0.125
+
+    Sets the thickness relative to character height. Values of 0.01 to 0.25 are allowed but the extremes are not readable. At low values characters that use strokes to create solid fill will have gaps and at large values characters such as `@` with small gaps between strokes may become solid.
+
+- -f --force
+
+    Skip hash check for the input file. The script checks the hash as an easy way to verify that the input file will be correctly formatted. This can be skipped however it could cause issues if the file is changed.
+
 ### Standalone script:
 
 This script uses shapely to approximate the outline and results in somewhat jagged curves. The Fontforge script uses curves and does not loose quality in this way.

@@ -64,7 +64,12 @@ for i, arg in enumerate(argv):
                 + Colors.RED
             )
             exit(1)
-    if arg == "--force" or arg == "-f":
+        if thickness > 0.25 or thickness < 0.01:
+            print(
+                Colors.RED + "Thickness should be between 0.01 and 0.25" + Colors.RESET
+            )
+            exit(2)
+    elif arg == "--force" or arg == "-f":
         force = True
         print(Colors.YELLOW + "Skipping file hash check." + Colors.RESET)
     else:
