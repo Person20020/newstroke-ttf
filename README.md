@@ -4,7 +4,7 @@ A script to convert the NewStroke font used as the default KiCad font to TTF.
 
 Original files: https://vovanium.ru/sledy/newstroke/en
 
-TTF file: [download](https://github.com/Person20020/newstroke-ttf/releases/download/v0.1/NewStroke-W1.0_T0.125.ttf)
+TTF file: [download](https://github.com/Person20020/newstroke-ttf/releases/download/v0.2/NewStroke-T0.125.ttf)
 
 ## Usage
 
