@@ -14,7 +14,7 @@ This script is run using [Fontforge](https://fontforge.org/en-US/). It uses actu
 
 The script does output many errors but it does not appear to affect the quality of the glyphs.
 
-Run the scrip with this command:
+Run the script with this command:
 ```bash
 fontforge -lang=py -script fontforge-script.py /path/to/newstroke_font.h [-t --thickness=[0.01-0.25]] [-f --force]
 ```
