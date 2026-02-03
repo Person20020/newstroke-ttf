@@ -14,13 +14,23 @@ This script is run using [Fontforge](https://fontforge.org/en-US/). It uses actu
 
 The script does output many errors but it does not appear to affect the quality of the glyphs.
 
-Run the script with this command:
+- Clone this repository:
+
+```bash
+git clone https://github.com/Person20020/newstroke-ttf.git
+cd newstroke-ttf
+```
+
+- Download and extract the original files. ([link](https://vovanium.ru/sledy/newstroke/en))
+
+- Run the script with the following command:
 ```bash
 fontforge -lang=py -script fontforge-script.py /path/to/newstroke_font.h [-t --thickness=[0.01-0.25]] [-f --force]
 ```
 
 The resulting file is saved as `./NewStroke-T[thickness].ttf`.
 
+**Optional arguments:**
 - -t --thickness=[0.01-0.25]
 
     Default: 0.125
@@ -74,7 +84,7 @@ python main.py --font_file /path/to/newstroke_font.h
 
 The resulting file will be in `/master_ttf` named `NewStroke-W[width]_T[thickness].ttf`.
 
-### Arguments:
+**Arguments**:
 
 - `--font_file` (Required)
 
